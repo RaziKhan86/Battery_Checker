@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Battery Status Checker</title>
+  <link rel="shortcut icon" href="icons.jpg" type="image/x-icon">
+  <style>
+    body {
+      font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+
+    #batteryLevel {
+      font-size: 30px;
+      margin: 10px;
+    }
+
+    #chargingStatus {
+      font-size: 20px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔋 Battery Information</h1>
+  <div id="batteryLevel">Battery Level: --%</div>
+  <div id="chargingStatus">Charging Status: --</div>
+
+  <script>
+   // Step:1 Check if bettery API is available 
+   if('getBattery' in navigator){
+    navigator.getBattery().then(function(battery){
+
+        // Step:2 Function to update battery level
+        function showBatteryLevel(){
+            let level = Math.round(battery.level * 100);
+            document.getElementById('batteryLevel').textContent = "Battery Level: " +level+ "%";
+        }
+
+        // Step:3 Function to update charging status
+        function showChargingStatus(){
+            let statusText = battery.charging ? "Charging  🔌" : "Not Charging ❌";
+            document.getElementById('chargingStatus').textContent = "Charging Status: " + statusText;
+        }
+
+        // Step:4 Show current status once
+        showBatteryLevel();
+        showChargingStatus();
+
+
+        // Step:5 Update automatically id status changes
+        battery.addEventListener('levelchange', showBatteryLevel);
+        battery.addEventListener('chargingchange', showChargingStatus);
+
+    });
+   }else{
+    document.getElementById('batteryLevel').textContent = "Battery Status Not Supported in this Browser!";
+    document.getElementById('chargingStatus').textContent = "";
+   }
+  </script>
+
+</body>
+</html>
