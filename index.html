@@ -26,12 +26,11 @@
   <h1>🔋 Battery Information</h1>
   <div id="batteryLevel">Battery Level: --%</div>
   <div id="chargingStatus">Charging Status: --</div>
-
+  <div class="Discharge-battery"></div>
   <script>
    // Step:1 Check if bettery API is available 
    if('getBattery' in navigator){
     navigator.getBattery().then(function(battery){
-
         // Step:2 Function to update battery level
         function showBatteryLevel(){
             let level = Math.round(battery.level * 100);
@@ -44,6 +43,14 @@
             document.getElementById('chargingStatus').textContent = "Charging Status: " + statusText;
         }
 
+        // Check battery level if batteryLevele<20;
+        if((battery.level * 100) < 20)
+        {
+          document.querySelector('.Discharge-battery').textContent = "please charge me lagao";
+        }else{
+          document.querySelector('.Discharge-battery').textContent = "Charge hai";
+        }
+     
         // Step:4 Show current status once
         showBatteryLevel();
         showChargingStatus();
@@ -51,8 +58,7 @@
 
         // Step:5 Update automatically id status changes
         battery.addEventListener('levelchange', showBatteryLevel);
-        battery.addEventListener('chargingchange', showChargingStatus);
-
+        battery.addEventListener('chargingchange', showChargingStatus); 
     });
    }else{
     document.getElementById('batteryLevel').textContent = "Battery Status Not Supported in this Browser!";
